@@ -6,7 +6,7 @@ import argparse
 import time
 
 class SyncFolders:
-    def __init__(self, src_folder, replica_folder, sync_interval, log_file):
+    def __init__(self, src_folder: str, replica_folder: str, sync_interval: int, log_file: str):
         self._src_folder = src_folder
         self._replica_folder = replica_folder
         self._sync_interval = sync_interval
@@ -43,7 +43,7 @@ class SyncFolders:
             relative_path = os.path.relpath(path, self._src_folder)
             replica_path = os.path.join(self._replica_folder, relative_path)
             os.makedirs(replica_path, exist_ok=True)
-            self._compare_files_in_folders(files, path, replica_path)
+            self._synchronize_files_in_folders(files, path, replica_path)
 
         for path, dirs, files in os.walk(self._replica_folder):
             relative_path = os.path.relpath(path, self._replica_folder)
@@ -51,7 +51,7 @@ class SyncFolders:
             self._cleanup_files(src_path=src_path, replica_path=path, files=files)
             self._cleanup_directories(src_path=src_path, replica_path=path, dirs=dirs)
 
-    def _compare_files_in_folders(self, files: str, root_path: str, replica_path: str):
+    def _synchronize_files_in_folders(self, files: str, root_path: str, replica_path: str):
         for file in files:
             src_file = os.path.join(root_path, file)
             replica_file = os.path.join(replica_path, file)
